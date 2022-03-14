@@ -3,8 +3,9 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .serializers import NivelSerializer, DesenvolvedorSerializer
 from .models import Nivel, Desenvolvedor
-from rest_framework import filters
+from rest_framework import filters, mixins, generics
 from rest_framework.views import APIView
+from django.http import Http404
 
 class Welcome(APIView):
 
@@ -19,16 +20,13 @@ class Welcome(APIView):
             ]
         )
     
-class DesenvolvedorViewSet(APIView):
+class DesenvolvedorViewSet( mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin, generics.GenericAPIView):
+    
+    queryset = Desenvolvedor.objects.all()
     serializer_class = DesenvolvedorSerializer
-
-    def get(self, request, format=None):
-        desenvolvedores = Desenvolvedor.objects.all()
-        serializer = self.serializer_class(desenvolvedores, many=True)
-        
-        if serializer.data:
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response("No momento nao foi possível exibir os dados dos desenvolvedores", status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
     def post(self, request, format=None):
         serializer = self.serializer_class(data=
@@ -48,6 +46,13 @@ class DesenvolvedorViewSet(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
 
 
 
