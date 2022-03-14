@@ -15,6 +15,8 @@ class Welcome(APIView):
                     "Endpoints": [
                         {"Cadastro de Desenvolvedor(POST)": "http://localhost:8000/api/dev/"},
                         {"Lista de Desenvolvedores Cadastrados(GET)": "http://localhost:8000/api/dev/"},
+                        {"Atualizar Informações de Desenvolvedores Cadastrados(PUT)": "http://localhost:8000/api/dev/'COLOQUE O ID DO DESENVOLVEDOR AQUI'"},
+                        {"Deletar Desenvolvedor Cadastrado (DELETE)": "http://localhost:8000/api/dev/'COLOQUE O ID DO DESENVOLVEDOR AQUI'"},
                     ]
                 }
             ]
