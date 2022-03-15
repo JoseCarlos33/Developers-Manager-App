@@ -8,7 +8,7 @@ class Nivel(models.Model):
 
 class Desenvolvedor(models.Model):
 
-    nivel = models.ForeignKey(Nivel, on_delete=models.CASCADE, blank=True)
+    nivel = models.ForeignKey(Nivel, on_delete=models.SET_NULL, blank=True, null=True)
     nome = models.CharField(max_length=50)
     sexo = models.CharField(max_length=20)
     data_nascimento = models.DateField()
