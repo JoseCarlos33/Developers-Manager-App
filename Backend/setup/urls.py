@@ -8,7 +8,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/dev/', DesenvolvedorViewSet.as_view()),
     path('api/dev/<int:pk>/', DesenvolvedorViewSet.as_view()),
-    path('api/level/', NivelViewSet.as_view())
+    path('api/level/', NivelViewSet.as_view()),
+    path('api/level/<int:pk>/', NivelViewSet.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -58,11 +58,22 @@ class DesenvolvedorViewSet( mixins.UpdateModelMixin, mixins.DestroyModelMixin, m
 
 
 
-class NivelViewSet(APIView):
+class NivelViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin, generics.GenericAPIView):
+    
     queryset = Nivel.objects.all()
     serializer_class = NivelSerializer
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['id']
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
 
     
