@@ -17,6 +17,7 @@
     "react-native-gesture-handler": "^2.3.2",
     "react-native-responsive-fontsize": "^0.5.1",
     "react-native-responsive-screen": "^1.4.2",
+    "react-native-root-toast": "^3.3.0",
     "react-native-svg": "^12.3.0",
     "react-native-vector-icons": "^9.1.0",
     "styled-components": "^5.3.3",
