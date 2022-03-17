@@ -10,4 +10,13 @@ export const Container = styled.View`
   height: ${hp('19%')}px;
   width: ${wp('100%')}px;
   background-color: ${theme.color.backgroundSecundary};
+  justify-content: center;
+  padding-left: 30px;
+`;
+
+export const Title = styled.Text`
+  /* font-family: ${theme.font.medium}; */
+  font-size: ${RFValue(24)}px;
+  padding-bottom: 4px;
+  color: ${theme.color.white}
 `;

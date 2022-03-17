@@ -7,7 +7,9 @@ import {
 const Header: React.FC = () => {
   return (
     <Container>
-      
+      <Title>
+        Dashboard
+      </Title>
     </Container>
   );
 }

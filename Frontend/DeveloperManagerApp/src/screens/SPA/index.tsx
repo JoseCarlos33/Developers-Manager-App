@@ -2,11 +2,13 @@ import React, { useState, useRef, useCallback } from 'react';
 import { Dimensions, Animated, View, FlatList } from 'react-native';
 import Header from '../../components/Header';
 import AnimatedTopBar from '../../components/AnimatedTopBar';
+import Icon from 'react-native-vector-icons/dist/Feather';
 
 import {
   Container,
-  ListPagination
+  AddButton
 } from './styles';
+import { theme } from '../../utils/theme';
 interface ContentProps {
   width: number;
   x: number;
@@ -16,7 +18,7 @@ const { width, height } = Dimensions.get('window');
 
 const SPA: React.FC = () => {
   const [developerContentInfo, setDeveloperContentInfo] = useState<ContentProps>({
-    width: 130,
+    width: 187,
     x: 0,
   } as ContentProps);
   const [levelContentInfo, setlevelContentInfo] = useState<ContentProps>({
@@ -82,7 +84,7 @@ const SPA: React.FC = () => {
           keyExtractor={(item) => item.key}
           renderItem={ ({item}) => 
             <View style={{
-                backgroundColor: item.color,
+                // backgroundColor: item.color,
                 width: width,
                 height: '100%',
               }}
@@ -101,7 +103,9 @@ const SPA: React.FC = () => {
           }}
           style={{marginTop: 7}}
         />
-
+        <AddButton>
+          <Icon name="plus" size={30} color={theme.color.white}/>
+        </AddButton>
 
       </Container>
     </>
