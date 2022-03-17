@@ -22,6 +22,7 @@ interface TopBarProps {
   setLevelState(arg: ContentProps): void;
   isDeveloperOption: boolean;
   setIsDeveloperOption(arg: boolean): void;
+  changePage(arg: number): void;
 }
 
 
@@ -31,7 +32,8 @@ function AnimatedTopBar({
   levelState,
   setDeveloperState,
   setLevelState,
-  setIsDeveloperOption
+  setIsDeveloperOption,
+  changePage
 }: TopBarProps){
   
   const moveRefSwitchBottomBar = useRef(new Animated.Value(0)).current
@@ -100,7 +102,10 @@ function AnimatedTopBar({
           }
           setDeveloperState(formattedData)
         }} >
-          <ButtonTopBar onPress={() => setIsDeveloperOption(true)}>
+          <ButtonTopBar onPress={() => {
+            setIsDeveloperOption(true)
+            changePage(0)
+          }}>
             <TitleButtonTopBar
               style={{ color: isDeveloperOption ? theme.color.white : theme.color.gray_medium }}
             >
@@ -117,7 +122,10 @@ function AnimatedTopBar({
           }
           setLevelState(formattedData)
         }}>
-          <ButtonTopBar onPress={() => setIsDeveloperOption(false)}>
+          <ButtonTopBar onPress={() => {
+            setIsDeveloperOption(false)
+            changePage(1)
+          }}>
             <TitleButtonTopBar
               style={{ color: isDeveloperOption ? theme.color.gray_medium : theme.color.white }}
             >

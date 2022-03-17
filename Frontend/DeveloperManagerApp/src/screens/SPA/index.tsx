@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Dimensions, Animated, View } from 'react-native';
+import React, { useState, useRef, useCallback } from 'react';
+import { Dimensions, Animated, View, FlatList } from 'react-native';
 import Header from '../../components/Header';
 import AnimatedTopBar from '../../components/AnimatedTopBar';
 
@@ -15,8 +15,14 @@ interface ContentProps {
 const { width, height } = Dimensions.get('window');
 
 const SPA: React.FC = () => {
-  const [developerContentInfo, setDeveloperContentInfo] = useState<ContentProps>({} as ContentProps);
-  const [levelContentInfo, setlevelContentInfo] = useState<ContentProps>({} as ContentProps);
+  const [developerContentInfo, setDeveloperContentInfo] = useState<ContentProps>({
+    width: 130,
+    x: 0,
+  } as ContentProps);
+  const [levelContentInfo, setlevelContentInfo] = useState<ContentProps>({
+    width: 0,
+    x: 0,
+  } as ContentProps);
   const [isDeveloperOption, setIsDeveloperOption] = useState(true)
   const [positionPagination, setPositionPagination] = useState(0);
   const [page, setPage] = useState(1);
@@ -25,17 +31,28 @@ const SPA: React.FC = () => {
   const scrollTranslateX = useRef(new Animated.Value(0)).current;
   const scrollX = useRef(new Animated.Value(0)).current;
 
-   const pages = [
+   const Pages = [
     {
       key: '1',
+      color: '#14dc8f'
     },
     {
       key: '2',
+      color: '#540d0d'
     }
   ]
 
-  function getCurrentPage(scrollXOfPage: string) {
-    const pageWidth = Number(scrollXOfPage) / width;
+  const changePage = useCallback(
+    pageIndex => {
+      ref?.current?.scrollToOffset({
+        offset: pageIndex * width,
+      });
+    },
+    [ref]
+  );
+
+  function getCurrentPage(scrollXOfPage: number) {
+    const pageWidth = scrollXOfPage / width;
     setPositionPagination(pageWidth)
     const currentPage = pageWidth + 1.000001;
     const pageFormatted = Math.floor(currentPage);
@@ -53,20 +70,21 @@ const SPA: React.FC = () => {
           setDeveloperState={setDeveloperContentInfo}
           setIsDeveloperOption={setIsDeveloperOption}
           setLevelState={setlevelContentInfo}
+          changePage={changePage}
         />
 
-        <ListPagination
+        <Animated.FlatList
           ref={ref}
-          data={pages}
+          data={Pages}
           keyExtractor={(item) => item.key}
-          renderItem={ item => (
+          renderItem={ ({item}) => 
             <View style={{
-                backgroundColor: Number(item.key) % 2 == 0 ? '#14dc8f' : '#540d0d',
-                height: 200,
-                width: 200
+                backgroundColor: item.color,
+                width: width,
+                height: '100%',
               }}
             />
-          )}
+          }
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
@@ -74,11 +92,13 @@ const SPA: React.FC = () => {
             let contentOffset = e.nativeEvent.contentOffset;
             getCurrentPage(contentOffset.x);
             Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
-              useNativeDriver: false,
+              useNativeDriver: true,
             });
             scrollX.setValue(contentOffset.x)
           }}
+          style={{marginTop: 7}}
         />
+
 
       </Container>
     </>
