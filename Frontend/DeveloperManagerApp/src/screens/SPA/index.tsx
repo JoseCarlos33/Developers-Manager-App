@@ -55,8 +55,9 @@ const SPA: React.FC = () => {
     const pageWidth = scrollXOfPage / width;
     setPositionPagination(pageWidth)
     const currentPage = pageWidth + 1.000001;
-    const pageFormatted = Math.floor(currentPage);
+    const pageFormatted = Math.round(currentPage);
     setPage(pageFormatted);
+    console.log(page)
   }
 
   return (
@@ -70,7 +71,9 @@ const SPA: React.FC = () => {
           setDeveloperState={setDeveloperContentInfo}
           setIsDeveloperOption={setIsDeveloperOption}
           setLevelState={setlevelContentInfo}
-          changePage={changePage}
+          changePagination={changePage}
+          currentPage={page}
+          setPage={setPage}
         />
 
         <Animated.FlatList

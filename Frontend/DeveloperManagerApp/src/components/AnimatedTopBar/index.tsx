@@ -22,7 +22,9 @@ interface TopBarProps {
   setLevelState(arg: ContentProps): void;
   isDeveloperOption: boolean;
   setIsDeveloperOption(arg: boolean): void;
-  changePage(arg: number): void;
+  changePagination(arg: number): void;
+  setPage(arg: number): void;
+  currentPage: number;
 }
 
 
@@ -33,7 +35,9 @@ function AnimatedTopBar({
   setDeveloperState,
   setLevelState,
   setIsDeveloperOption,
-  changePage
+  changePagination,
+  currentPage,
+  setPage
 }: TopBarProps){
   
   const moveRefSwitchBottomBar = useRef(new Animated.Value(0)).current
@@ -51,7 +55,8 @@ function AnimatedTopBar({
   };
 
   useEffect(() => {
-    if(isDeveloperOption){
+    if(currentPage == 1){
+      console.log('pagina atual dev',currentPage)
       Animated.timing(
         moveRefSwitchBottomBar,
         {
@@ -71,6 +76,7 @@ function AnimatedTopBar({
         }
       ).start()
     }else{
+      console.log('pagina atual nivel',currentPage)
       Animated.timing(
         moveRefSwitchBottomBar,
         {
@@ -90,7 +96,8 @@ function AnimatedTopBar({
         }
       ).start()
     }
-  }, [isDeveloperOption])
+  }, [currentPage])
+
 
   return (
     <TopBarContent>
@@ -104,10 +111,11 @@ function AnimatedTopBar({
         }} >
           <ButtonTopBar onPress={() => {
             setIsDeveloperOption(true)
-            changePage(0)
+            changePagination(0)
+            setPage(1)
           }}>
             <TitleButtonTopBar
-              style={{ color: isDeveloperOption ? theme.color.white : theme.color.gray_medium }}
+              style={{ color: currentPage == 1 ? theme.color.white : theme.color.gray_medium }}
             >
               Desenvolvedores
             </TitleButtonTopBar>
@@ -124,10 +132,11 @@ function AnimatedTopBar({
         }}>
           <ButtonTopBar onPress={() => {
             setIsDeveloperOption(false)
-            changePage(1)
+            changePagination(2)
+            setPage(2)
           }}>
             <TitleButtonTopBar
-              style={{ color: isDeveloperOption ? theme.color.gray_medium : theme.color.white }}
+              style={{ color: currentPage == 2 ? theme.color.white : theme.color.gray_medium}}
             >
               Níveis
             </TitleButtonTopBar>
