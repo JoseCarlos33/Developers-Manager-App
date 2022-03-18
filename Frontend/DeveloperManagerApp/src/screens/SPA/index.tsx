@@ -96,7 +96,7 @@ const SPA: React.FC = () => {
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
-          onScroll={e => {
+          onMomentumScrollEnd={e => {
             let contentOffset = e.nativeEvent.contentOffset;
             const pageWidth = contentOffset.x / width;
             setPositionPagination(pageWidth)
