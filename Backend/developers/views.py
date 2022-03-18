@@ -62,7 +62,7 @@ class NivelViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Dest
     
     queryset = Nivel.objects.all()
     serializer_class = NivelSerializer
-
+    
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
