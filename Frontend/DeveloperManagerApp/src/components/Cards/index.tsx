@@ -5,12 +5,20 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import Icon from 'react-native-vector-icons/dist/Feather';
+import { theme } from '../../utils/theme';
 
 import {
   CardContent,
   ButtonContainer,
   InfoBox,
   Name,
+  LateralColor,
+  InfoContentText,
+  InfoText,
+  Label,
+  IconButton,
+  IconContent
 } from './styles'
 
 interface CardProps {
@@ -63,10 +71,30 @@ function Card({
 
           : <ButtonContainer>
               <CardContent style={{ height: hp('18%') }}>
+                <LateralColor/>
                 <InfoBox>
-                  <Name>{nameFormatted}</Name>
-                  
+                  <Name numberOfLines={1}>{nameFormatted}</Name>
+                  <InfoContentText>
+                    <Label>Sexo: </Label>
+                    <InfoText>{genre}</InfoText>
+                  </InfoContentText>
+                  <InfoContentText>
+                    <Label>Nível: </Label>
+                    <InfoText>{developerLevel}</InfoText>
+                  </InfoContentText>
+                  <InfoContentText>
+                    <Label>Idade: </Label>
+                    <InfoText>{age}</InfoText>
+                  </InfoContentText>
                 </InfoBox>
+                <IconContent>
+                  <IconButton>
+                    <Icon name="edit-3" size={21} color={theme.color.orange}/>
+                  </IconButton>
+                  <IconButton>
+                    <Icon name="trash-2" size={21} color={theme.color.gray_medium}/>
+                  </IconButton>
+                </IconContent>
               </CardContent>
             </ButtonContainer>
 

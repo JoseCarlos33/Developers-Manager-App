@@ -11,7 +11,9 @@ export const theme = {
     backgroundSecundary: '#8603f9',
     orange: '#f28200',
     red: '#FF0000',
-    dark_blue: '#0078be',
-    gray_medium: '#969696'
+    dark_blue: '#001cbe',
+    gray_medium: '#969696',
+    verde: '#1da716',
+    
   },
 };

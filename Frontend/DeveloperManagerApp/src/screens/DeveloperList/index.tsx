@@ -6,7 +6,8 @@ import Card from '../../components/Cards';
 import { axiosInstance } from '../../services/developerService';
 
 import {
-  FlatListDev
+  FlatListDev,
+  FooterSpace
 } from './styles';
 
 const DeveloperList: React.FC = () => {
@@ -44,10 +45,21 @@ const DeveloperList: React.FC = () => {
       data={data}
       keyExtractor={() => Math.random()}
       renderItem={ ({item, index}) => 
-        <Card
-          type="dev"
-          name={item.nome}
-        />
+        <>
+          {
+            console.log(item.nivel)
+          }
+          <Card
+            type="dev"
+            name={item.nome}
+            developerLevel={item.nivel}
+            age={item.idade}
+            genre={item.sexo}
+          />
+          {
+            index == (data.length - 1) && <FooterSpace/>
+          }
+        </>
       }
     />
   );
