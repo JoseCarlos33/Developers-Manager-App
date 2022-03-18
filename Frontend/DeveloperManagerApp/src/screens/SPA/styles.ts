@@ -21,3 +21,9 @@ export const AddButton = styled(RectButton)`
   justify-content: center;
   align-items: center;
 `;
+
+export const PageContent = styled.View`
+  align-items: center;
+  width: ${width};
+  height: 100%;
+`; 

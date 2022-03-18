@@ -146,7 +146,7 @@ function AnimatedTopBar({
         >
           <ButtonTopBar onPress={() => {
             setIsDeveloperOption(false)
-            changePagination(2)
+            changePagination(2.5)
             setPage(2)
             setPageAnimated(2)
           }}>

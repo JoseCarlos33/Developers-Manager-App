@@ -3,12 +3,17 @@ import { Dimensions, Animated, View, FlatList } from 'react-native';
 import Header from '../../components/Header';
 import AnimatedTopBar from '../../components/AnimatedTopBar';
 import Icon from 'react-native-vector-icons/dist/Feather';
+import { theme } from '../../utils/theme';
+import Card from '../../components/Cards';
 
 import {
   Container,
-  AddButton
+  AddButton,
+  PageContent
 } from './styles';
-import { theme } from '../../utils/theme';
+import DeveloperList from '../DeveloperList';
+
+
 interface ContentProps {
   width: number;
   x: number;
@@ -36,11 +41,9 @@ const SPA: React.FC = () => {
    const Pages = [
     {
       key: '1',
-      color: '#14dc8f'
     },
     {
       key: '2',
-      color: '#540d0d'
     }
   ]
 
@@ -59,7 +62,6 @@ const SPA: React.FC = () => {
     const currentPage = pageWidth + 1.000001;
     const pageFormatted = Math.round(currentPage);
     setPage(pageFormatted);
-    console.log(page)
   }
 
   return (
@@ -82,24 +84,34 @@ const SPA: React.FC = () => {
           ref={ref}
           data={Pages}
           keyExtractor={(item) => item.key}
-          renderItem={ ({item}) => 
-            <View style={{
-                // backgroundColor: item.color,
-                width: width,
-                height: '100%',
-              }}
-            />
+          renderItem={ ({item, index}) => 
+            <PageContent>
+              {
+                index == 0 
+                ? <DeveloperList/>
+                : <></>
+              }
+            </PageContent>
           }
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
           onScroll={e => {
             let contentOffset = e.nativeEvent.contentOffset;
-            getCurrentPage(contentOffset.x);
+            const pageWidth = contentOffset.x / width;
+            setPositionPagination(pageWidth)
+            const currentPage = pageWidth + 1.000001;
+            const pageFormatted = Math.round(currentPage);
+            
+    
             Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
               useNativeDriver: true,
             });
-            scrollX.setValue(contentOffset.x)
+            if(pageFormatted == 1 || pageFormatted == 2){
+              getCurrentPage(contentOffset.x);
+              scrollX.setValue(contentOffset.x)
+            }
+            
           }}
           style={{marginTop: 7}}
         />
