@@ -1,7 +1,4 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { listenOrientationChange } from 'react-native-responsive-screen';
+import React, { useEffect, useState } from 'react';
 import Card from '../../components/Cards';
 import { axiosInstance } from '../../services/developerService';
 
@@ -33,6 +30,21 @@ const DeveloperList: React.FC = () => {
       });
   }
 
+  async function deleteDeveloper(id: number) {
+    setIsLoading(true);
+    await axiosInstance.delete(`api/dev/${id}/`, {
+    })
+      .then(response => {
+        getDevelopers()
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.log('error ' + error);
+      });
+  }
+  
+
   useEffect(() => {
     if(firstGet){
       getDevelopers()
@@ -55,6 +67,8 @@ const DeveloperList: React.FC = () => {
             developerLevel={item.nivel}
             age={item.idade}
             genre={item.sexo}
+            id={item.id}
+            deleteMethod={deleteDeveloper}
           />
           {
             index == (data.length - 1) && <FooterSpace/>
