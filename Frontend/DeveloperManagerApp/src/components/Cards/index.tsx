@@ -1,5 +1,5 @@
-import React, { useEffect, useState}from 'react';
-import { Alert } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { Alert, Animated, Easing} from 'react-native';
 
 import {
   widthPercentageToDP as wp,
@@ -7,6 +7,7 @@ import {
 } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/dist/Feather';
 import { theme } from '../../utils/theme';
+import AnimatedInputs from '../AnimatedInputs';
 
 import {
   CardContent,
@@ -18,7 +19,11 @@ import {
   InfoText,
   Label,
   IconButton,
-  IconContent
+  IconContent,
+  EditText,
+  SaveButton,
+  AnimatedButtonView,
+  SaveButtonText
 } from './styles'
 
 interface CardProps {
@@ -31,6 +36,7 @@ interface CardProps {
   genre?: string;
   developerLevel?: string;
   deleteMethod(arg: number): void;
+  hobby?: string;
 }
 
 function Card({
@@ -42,12 +48,40 @@ function Card({
   age,
   genre,
   developerLevel,
-  deleteMethod
+  deleteMethod,
+  hobby
 }: CardProps) {
 
-  const [ nameFormatted, setNameFormatted ] = useState('');
+  const [nameFormatted, setNameFormatted] = useState('');
+  const [editCard, setEditCard] = useState(false);
 
-  function handleDeleteDeveloper(){
+  const moveRefCard = useRef(new Animated.Value(180)).current;
+  const moveRefButton = useRef(new Animated.Value(0)).current;
+  const opacityRefContent = useRef(new Animated.Value(0)).current;
+  const moveRefContent = useRef(new Animated.Value(-100)).current;
+
+  const scaleYCard = [
+    {
+      height: moveRefCard
+    }
+  ];
+
+  const scaleXButton = [
+    {
+      width: moveRefButton
+    }
+  ]
+
+  const editContentAnimation  = {
+    opacity: opacityRefContent,
+    transform: [
+      {
+        translateX: moveRefContent
+      },
+    ]
+  };
+
+  function handleDeleteDeveloper() {
     const nameSplit = name?.split(' ')
     const firstName = nameSplit?.filter((item, index) => index == 0 ? item : '')
 
@@ -70,56 +104,158 @@ function Card({
     let count = 0
     let newName = ''
     const nameListFormatted = nameList?.filter((item) => {
-      if(item !== 'da' && item !== 'de' && item !== 'do' && count < 3){
+      if (item !== 'da' && item !== 'de' && item !== 'do' && count < 3) {
         count++
         newName += ' ' + item
         return item
       }
     });
-    // let nameFormatted = nameListFormatted
     setNameFormatted(newName);
   }, [])
-  
-  
+
+  useEffect(() => {
+    if(!editCard){
+      Animated.timing(
+        moveRefCard,
+        {
+          toValue: 180,
+          duration: 100,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+      Animated.timing(
+        moveRefButton,
+        {
+          toValue: 0,
+          duration: 100,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+      Animated.timing(
+        opacityRefContent,
+        {
+          toValue: 0,
+          duration: 300,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+      Animated.timing(
+        moveRefContent,
+        {
+          toValue: -50,
+          duration: 300,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+    } else {
+      Animated.timing(
+        moveRefCard,
+        {
+          toValue: 500,
+          duration: 100,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+      Animated.timing(
+        moveRefButton,
+        {
+          toValue: 330,
+          duration: 350,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+      Animated.timing(
+        opacityRefContent,
+        {
+          toValue: 1,
+          duration: 500,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+      Animated.timing(
+        moveRefContent,
+        {
+          toValue: 0,
+          duration: 400,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+    }
+  }, [editCard])
 
   return (
     <>
       {
         type == "nivel"
           ? <ButtonContainer>
-              <CardContent style={{ height: hp('10%') }}>
+            <CardContent style={{ height: hp('10%') }}>
 
-              </CardContent>
-            </ButtonContainer>
+            </CardContent>
+          </ButtonContainer>
 
-          : <ButtonContainer>
-              <CardContent style={{ height: hp('18%') }}>
-                <LateralColor/>
-                <InfoBox>
-                  <Name numberOfLines={1}>{nameFormatted}</Name>
-                  <InfoContentText>
-                    <Label>Sexo: </Label>
-                    <InfoText>{genre}</InfoText>
-                  </InfoContentText>
-                  <InfoContentText>
-                    <Label>Nível: </Label>
-                    <InfoText>{developerLevel}</InfoText>
-                  </InfoContentText>
-                  <InfoContentText>
-                    <Label>Idade: </Label>
-                    <InfoText>{age}</InfoText>
-                  </InfoContentText>
-                </InfoBox>
-                <IconContent>
-                  <IconButton>
-                    <Icon name="edit-3" size={21} color={theme.color.orange}/>
-                  </IconButton>
-                  <IconButton onPress={handleDeleteDeveloper}>
-                    <Icon name="trash-2" size={21} color={theme.color.gray_medium}/>
-                  </IconButton>
-                </IconContent>
-              </CardContent>
-            </ButtonContainer>
+
+          : <CardContent style={scaleYCard}>
+              <LateralColor/>
+              {
+                editCard == true
+                ? 
+                  <>
+                    <InfoBox style={editContentAnimation}>
+                      <EditText >Editar Desenvolvedor(a)</EditText>
+                      
+                      <AnimatedInputs
+                        id={id}
+                        oldAge={age?.toString()}
+                        oldGenre={genre!}
+                        oldHobby={hobby!}
+                        oldLevel={developerLevel!}
+                        oldName={name!}
+                      />
+                      <AnimatedButtonView style={scaleXButton}/>
+                      <SaveButton onPress={() => setEditCard(false)}>
+                        <SaveButtonText>Salvar</SaveButtonText>
+                      </SaveButton>
+                    </InfoBox>
+                  </>
+                : <>
+                    <InfoBox>
+                      <Name numberOfLines={1}>{nameFormatted}</Name>
+                      <InfoContentText>
+                        <Label>Sexo: </Label>
+                        <InfoText>{genre}</InfoText>
+                      </InfoContentText>
+                      <InfoContentText>
+                        <Label>Hobby: </Label>
+                        <InfoText>{hobby == '' || hobby == null ? 'Nenhum' : hobby}</InfoText>
+                      </InfoContentText>
+                      <InfoContentText>
+                        <Label>Nível: </Label>
+                        <InfoText>{developerLevel}</InfoText>
+                      </InfoContentText>
+                      <InfoContentText>
+                        <Label>Idade: </Label>
+                        <InfoText>{age}</InfoText>
+                      </InfoContentText>
+                    </InfoBox>
+                    <IconContent>
+                      <IconButton>
+                        <Icon name="edit-3" onPress={() => setEditCard(true)} size={21} color={theme.color.orange} />
+                      </IconButton>
+                      <IconButton onPress={handleDeleteDeveloper}>
+                        <Icon name="trash-2" size={21} color={theme.color.gray_medium} />
+                      </IconButton>
+                    </IconContent>
+                  </>
+              }
+            </CardContent>
 
       }
     </>

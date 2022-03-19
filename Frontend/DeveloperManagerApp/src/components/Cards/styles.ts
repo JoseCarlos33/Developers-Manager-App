@@ -5,9 +5,10 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, Animated } from 'react-native';
+import { RectButton } from 'react-native-gesture-handler';
 
-export const CardContent = styled(View).attrs({
+export const CardContent = styled(Animated.View).attrs({
   shadowColor: 'black',
   shadowOffset: { height: 1, width: 1 },
   shadowOpacity: 0.3,
@@ -19,6 +20,7 @@ export const CardContent = styled(View).attrs({
   background-color: ${theme.color.blue};
   background-color: ${theme.color.white};
   margin-top: 21px;
+  align-self: center;
   flex-direction: row;
 `;
 
@@ -44,6 +46,22 @@ export const Name = styled.Text`
   margin-bottom: 5px;
 `;
 
+export const EditText = styled.Text`
+  font-size: ${RFValue(20)}px;
+  /* font-family: ${theme.font.regular}; */
+  width: 100%;
+  color: ${theme.color.orange};
+  margin-bottom: 5px;
+`;
+
+export const SaveButtonText = styled.Text`
+  font-size: ${RFValue(20)}px;
+  /* font-family: ${theme.font.regular}; */
+  width: 100%;
+  color: ${theme.color.white};
+  margin-bottom: 5px;
+`;
+
 export const Description = styled.Text`
   font-size: ${RFValue(14)}px;
   font-family: ${theme.font.medium};
@@ -52,7 +70,7 @@ export const Description = styled.Text`
   text-transform: capitalize;
 `;
 
-export const InfoBox = styled.View`
+export const InfoBox = styled(Animated.View)`
   padding: 16px;
   width: 83%;
 `;
@@ -88,4 +106,28 @@ export const InfoText = styled.Text`
   font-size: ${RFValue(14)}px;
   /* font-family: ${theme.font.regular}; */
   text-transform: capitalize;
+  align-self: center;
+`;
+
+export const AnimatedButtonView = styled(Animated.View)`
+  height: 50px;
+  width: 21px;
+  background-color: ${theme.color.backgroundSecundary};
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  position: absolute;
+  bottom: 0;
+  left: -5px;
+`;
+
+export const SaveButton = styled(RectButton)`
+  height: 50px;
+  width: 132%;
+  background-color: transparent;
+  position: absolute;
+  bottom: 0px;
+  margin-top: 50px;
+  align-items: center;
+  justify-content: center;
+  padding-left: 40%;
 `;
