@@ -8,12 +8,12 @@ class Nivel(models.Model):
 
 class Desenvolvedor(models.Model):
 
-    nivel = models.ForeignKey(Nivel, related_name='desenvolvedores', on_delete=models.PROTECT, blank=True, null=True)
+    nivel = models.ForeignKey(Nivel, related_name='desenvolvedores', on_delete=models.PROTECT)
     nome = models.CharField(max_length=50)
     sexo = models.CharField(max_length=20)
-    data_nascimento = models.DateField()
+    data_nascimento = models.DateField(blank=True)
     idade = models.IntegerField()
-    hobby = models.CharField(max_length=11, default="")
+    hobby = models.CharField(max_length=20, default="", blank=True, null=True)
 
     def __str__(self):
         return self.nome
