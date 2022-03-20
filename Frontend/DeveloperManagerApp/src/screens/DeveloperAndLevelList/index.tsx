@@ -8,11 +8,16 @@ import {
   FooterSpace
 } from './styles';
 
-const DeveloperList: React.FC = () => {
-  const [ isLoading, setIsLoading ] = useState(false);
-  const [ data, setData ] = useState([]);
-  const [ firstGet, setFirstGet ] = useState(true);
-  const [ levelData, setLevelData ] = useState([]);
+interface ListProps {
+  type: string;
+}
+
+function DeveloperAndLevelList({ type }: ListProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [dataDev, setDataDev] = useState([]);
+  const [dataLevel, setDataLevel] = useState([]);
+  const [firstGet, setFirstGet] = useState(true);
+  const [levelData, setLevelData] = useState([]);
 
   async function getDevelopers() {
     setIsLoading(true);
@@ -23,7 +28,7 @@ const DeveloperList: React.FC = () => {
         response.data.map((item) => {
           list.push(item)
         })
-        setData(list)
+        setDataDev(list)
         setIsLoading(false);
       })
       .catch((error) => {
@@ -37,8 +42,9 @@ const DeveloperList: React.FC = () => {
     await axiosInstance.get('api/level/', {
     })
       .then(response => {
-        console.log(response?.data)
+        console.log('DATAA:',response?.data)
         setLevelData(response?.data)
+        setDataLevel(response?.data)
         setIsLoading(false);
       })
       .catch((error) => {
@@ -90,7 +96,7 @@ const DeveloperList: React.FC = () => {
   // }
 
   useEffect(() => {
-    if(firstGet){
+    if (firstGet) {
       getDevelopers()
       getLevels()
       setFirstGet(false)
@@ -99,29 +105,47 @@ const DeveloperList: React.FC = () => {
 
   return (
     <FlatListDev
-      data={data}
+      data={ type == 'dev' ? dataDev : dataLevel}
       keyExtractor={() => Math.random()}
-      renderItem={ ({item, index}) => 
+      renderItem={({ item, index}) =>
         <>
-          <Card
-            type="dev"
-            name={item.nome}
-            developerLevel={item.nivel}
-            age={item.idade}
-            genre={item.sexo}
-            id={item.id}
-            deleteMethod={deleteDeveloper}
-            levelData={levelData}
-            getDevelopers={getDevelopers}
-            // updateDeveloper={handleUpdateDeveloper}
-          />
           {
-            index == (data.length - 1) && <FooterSpace/>
+            type == 'dev'
+              ? <Card
+                  type="dev"
+                  name={item.nome}
+                  developerLevel={item.nivel}
+                  age={item.idade}
+                  genre={item.sexo}
+                  hobby={item.hobby}
+                  id={item.id}
+                  deleteMethod={deleteDeveloper}
+                  levelData={levelData}
+                  getDevelopers={getDevelopers}
+                />
+              : <Card
+                  type="level"
+                  name={item.nivel}
+                  // developerLevel={item.nivel}
+                  // age={item.idade}
+                  // genre={item.sexo}
+                  // hobby={item.hobby}
+                  id={item.id}
+                  // deleteMethod={deleteDeveloper}
+                  // levelData={levelData}
+                  // getDevelopers={getDevelopers}
+                />
           }
+          {
+            type == 'dev'
+            ? index == (dataDev.length - 1) && <FooterSpace />
+            : index == (dataLevel.length - 1) && <FooterSpace />
+          }
+
         </>
       }
     />
   );
 }
 
-export default DeveloperList;
+export default DeveloperAndLevelList;

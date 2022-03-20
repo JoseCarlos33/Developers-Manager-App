@@ -48,7 +48,7 @@ interface CardProps {
   //   sexo
   // }: ResquestProps): void;
   hobby?: string;
-  levelData: any;
+  levelData?: any;
 }
 
 function Card({
@@ -211,12 +211,46 @@ function Card({
   return (
     <>
       {
-        type == "nivel"
-          ? <ButtonContainer>
-            <CardContent style={{ height: hp('10%') }}>
-
+        type == "level"
+          ? <CardContent style={{ height: hp('8%') }}>
+              <LateralColor/>
+              {
+                editCard == true
+                ? 
+                  <>
+                    <InfoBox style={editContentAnimation}>
+                      <EditText >Editar Desenvolvedor(a)</EditText>
+                      <AnimatedButtonView style={scaleXButton}/>
+                      <AnimatedInputs
+                        id={id}
+                        oldAge={age?.toString()}
+                        levelData={levelData}
+                        oldGenre={genre!}
+                        oldHobby={hobby!}
+                        oldLevel={developerLevel!}
+                        oldName={name!}
+                        submitionForm={submitionForm}
+                        setSubmitionForm={setSubmitionForm}
+                        setEditCard={setEditCard}
+                        getDevelopers={getDevelopers}
+                      />
+                      
+                      {/* <SaveButton onPress={() => {
+                        setSubmitionForm(true)
+                        setEditCard(false)
+                      }}>
+                        <SaveButtonText>Salvar</SaveButtonText>
+                      </SaveButton> */}
+                    </InfoBox>
+                    
+                  </>
+                : <>
+                    <InfoBox>
+                      <Name numberOfLines={1}>{nameFormatted}</Name>
+                    </InfoBox>
+                  </>
+              }
             </CardContent>
-          </ButtonContainer>
 
 
           : <CardContent style={scaleYCard}>
@@ -260,7 +294,7 @@ function Card({
                       </InfoContentText>
                       <InfoContentText>
                         <Label>Hobby: </Label>
-                        <InfoText>{hobby == '' || hobby == null ? 'Nenhum' : hobby}</InfoText>
+                        <InfoText>{hobby === '' || hobby == null ? 'Nenhum' : hobby}</InfoText>
                       </InfoContentText>
                       <InfoContentText>
                         <Label>Nível: </Label>

@@ -11,7 +11,7 @@ import {
   AddButton,
   PageContent
 } from './styles';
-import DeveloperList from '../DeveloperList';
+import DeveloperAndLevelList from '../DeveloperAndLevelList';
 
 
 interface ContentProps {
@@ -88,8 +88,8 @@ const SPA: React.FC = () => {
             <PageContent>
               {
                 index == 0 
-                ? <DeveloperList/>
-                : <></>
+                ? <DeveloperAndLevelList type="dev"/>
+                : <DeveloperAndLevelList type="level"/>
               }
             </PageContent>
           }
