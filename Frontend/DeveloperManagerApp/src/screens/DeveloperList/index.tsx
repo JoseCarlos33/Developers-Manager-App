@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Card from '../../components/Cards';
 import { axiosInstance } from '../../services/developerService';
+import { ResquestProps } from '../../types/request';
 
 import {
   FlatListDev,
@@ -11,6 +12,7 @@ const DeveloperList: React.FC = () => {
   const [ isLoading, setIsLoading ] = useState(false);
   const [ data, setData ] = useState([]);
   const [ firstGet, setFirstGet ] = useState(true);
+  const [ levelData, setLevelData ] = useState([]);
 
   async function getDevelopers() {
     setIsLoading(true);
@@ -22,6 +24,21 @@ const DeveloperList: React.FC = () => {
           list.push(item)
         })
         setData(list)
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.log('error ' + error);
+      });
+  }
+
+  async function getLevels() {
+    setIsLoading(true);
+    await axiosInstance.get('api/level/', {
+    })
+      .then(response => {
+        console.log(response?.data)
+        setLevelData(response?.data)
         setIsLoading(false);
       })
       .catch((error) => {
@@ -43,11 +60,39 @@ const DeveloperList: React.FC = () => {
         console.log('error ' + error);
       });
   }
-  
+
+  // async function handleUpdateDeveloper({
+  //   id,
+  //   hobby,
+  //   idade,
+  //   nivel,
+  //   nome,
+  //   sexo
+  // }: ResquestProps){
+  //   const data = {
+  //     "nivel": nivel,
+  //     "nome": nome,
+  //     "sexo": sexo,
+  //     "idade": idade,
+  //     "hobby": hobby 
+  //   }
+  //   await axiosInstance.put(`api/dev/${id}/`, {
+  //     body: JSON.stringify(data)
+  //   })
+  //     .then(response => {
+  //       getDevelopers()
+  //       setIsLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       setIsLoading(false);
+  //       console.log('error ' + error);
+  //     });
+  // }
 
   useEffect(() => {
     if(firstGet){
       getDevelopers()
+      getLevels()
       setFirstGet(false)
     }
   }, [])
@@ -58,9 +103,6 @@ const DeveloperList: React.FC = () => {
       keyExtractor={() => Math.random()}
       renderItem={ ({item, index}) => 
         <>
-          {
-            console.log(item.nivel)
-          }
           <Card
             type="dev"
             name={item.nome}
@@ -69,6 +111,9 @@ const DeveloperList: React.FC = () => {
             genre={item.sexo}
             id={item.id}
             deleteMethod={deleteDeveloper}
+            levelData={levelData}
+            getDevelopers={getDevelopers}
+            // updateDeveloper={handleUpdateDeveloper}
           />
           {
             index == (data.length - 1) && <FooterSpace/>

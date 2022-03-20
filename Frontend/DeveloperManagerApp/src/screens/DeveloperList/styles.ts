@@ -11,6 +11,6 @@ export const FlatListDev = styled(FlatList).attrs({
 `;
 
 export const FooterSpace = styled.View`
-  height: 50px;
+  height: 280px;
   width: 100%;
 `;

@@ -109,7 +109,9 @@ export const InfoText = styled.Text`
   align-self: center;
 `;
 
-export const AnimatedButtonView = styled(Animated.View)`
+export const AnimatedButtonView = styled(Animated.View).attrs({
+  zIndex: 0
+})`
   height: 50px;
   width: 21px;
   background-color: ${theme.color.backgroundSecundary};

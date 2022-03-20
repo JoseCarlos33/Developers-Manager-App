@@ -6,6 +6,8 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/dist/Feather';
+import { axiosInstance } from '../../services/developerService';
+import { ResquestProps } from '../../types/request';
 import { theme } from '../../utils/theme';
 import AnimatedInputs from '../AnimatedInputs';
 
@@ -36,7 +38,17 @@ interface CardProps {
   genre?: string;
   developerLevel?: string;
   deleteMethod(arg: number): void;
+  getDevelopers(): void;
+  // updateDeveloper({
+  //   id,
+  //   hobby,
+  //   idade,
+  //   nivel,
+  //   nome,
+  //   sexo
+  // }: ResquestProps): void;
   hobby?: string;
+  levelData: any;
 }
 
 function Card({
@@ -49,11 +61,15 @@ function Card({
   genre,
   developerLevel,
   deleteMethod,
-  hobby
+  hobby,
+  levelData,
+  getDevelopers,
+  // updateDeveloper
 }: CardProps) {
 
   const [nameFormatted, setNameFormatted] = useState('');
   const [editCard, setEditCard] = useState(false);
+  const [ submitionForm, setSubmitionForm ] = useState(false)
 
   const moveRefCard = useRef(new Animated.Value(180)).current;
   const moveRefButton = useRef(new Animated.Value(0)).current;
@@ -98,6 +114,7 @@ function Card({
       ]
     );
   }
+  
 
   useEffect(() => {
     const nameList = name?.split(' ')
@@ -174,7 +191,7 @@ function Card({
         opacityRefContent,
         {
           toValue: 1,
-          duration: 500,
+          duration: 590,
           easing: Easing.ease,
           useNativeDriver: false
         }
@@ -210,20 +227,29 @@ function Card({
                   <>
                     <InfoBox style={editContentAnimation}>
                       <EditText >Editar Desenvolvedor(a)</EditText>
-                      
+                      <AnimatedButtonView style={scaleXButton}/>
                       <AnimatedInputs
                         id={id}
                         oldAge={age?.toString()}
+                        levelData={levelData}
                         oldGenre={genre!}
                         oldHobby={hobby!}
                         oldLevel={developerLevel!}
                         oldName={name!}
+                        submitionForm={submitionForm}
+                        setSubmitionForm={setSubmitionForm}
+                        setEditCard={setEditCard}
+                        getDevelopers={getDevelopers}
                       />
-                      <AnimatedButtonView style={scaleXButton}/>
-                      <SaveButton onPress={() => setEditCard(false)}>
+                      
+                      {/* <SaveButton onPress={() => {
+                        setSubmitionForm(true)
+                        setEditCard(false)
+                      }}>
                         <SaveButtonText>Salvar</SaveButtonText>
-                      </SaveButton>
+                      </SaveButton> */}
                     </InfoBox>
+                    
                   </>
                 : <>
                     <InfoBox>
