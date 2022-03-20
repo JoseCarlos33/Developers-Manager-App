@@ -42,14 +42,7 @@ interface InputProps {
   setSubmitionForm(arg: boolean): void;
   setEditCard(arg: boolean): void;
   getDevelopers(): void;
-  // updateDeveloper({
-  //   id,
-  //   hobby,
-  //   idade,
-  //   nivel,
-  //   nome,
-  //   sexo
-  // }: ResquestProps): void;
+  getLevels(): void;
 }
 
 function AnimatedInputs({
@@ -65,6 +58,7 @@ function AnimatedInputs({
   submitionForm,
   setSubmitionForm,
   // updateDeveloper
+  getLevels
 }: InputProps) {
 
   const [name, setName] = useState(oldName);
@@ -141,7 +135,7 @@ function AnimatedInputs({
 
       const nivel = levelData.filter((item) => {
         if(item.nivel == levelTitle){
-          return item.id
+          return item
         }
       })
 

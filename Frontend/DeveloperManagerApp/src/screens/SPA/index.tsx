@@ -89,7 +89,7 @@ const SPA: React.FC = () => {
               {
                 index == 0 
                 ? <DeveloperAndLevelList type="dev"/>
-                : <DeveloperAndLevelList type="level"/>
+                : <DeveloperAndLevelList type="level" page={page}/>
               }
             </PageContent>
           }

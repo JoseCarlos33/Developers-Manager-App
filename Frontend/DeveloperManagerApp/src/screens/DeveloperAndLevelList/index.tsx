@@ -10,16 +10,33 @@ import {
 
 interface ListProps {
   type: string;
+  page: number;
 }
 
-function DeveloperAndLevelList({ type }: ListProps) {
+function DeveloperAndLevelList({ type, page}: ListProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [dataDev, setDataDev] = useState([]);
   const [dataLevel, setDataLevel] = useState([]);
   const [firstGet, setFirstGet] = useState(true);
   const [levelData, setLevelData] = useState([]);
 
+  async function getLevels() {
+    setIsLoading(true);
+    await axiosInstance.get('api/level/')
+      .then(response => {
+        console.log('DATAA:',response?.data)
+        setLevelData(response?.data)
+        setDataLevel(response?.data)
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.log('error ' + error);
+      });
+  }
+
   async function getDevelopers() {
+    
     setIsLoading(true);
     await axiosInstance.get('api/dev/', {
     })
@@ -29,22 +46,7 @@ function DeveloperAndLevelList({ type }: ListProps) {
           list.push(item)
         })
         setDataDev(list)
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        console.log('error ' + error);
-      });
-  }
-
-  async function getLevels() {
-    setIsLoading(true);
-    await axiosInstance.get('api/level/', {
-    })
-      .then(response => {
-        console.log('DATAA:',response?.data)
-        setLevelData(response?.data)
-        setDataLevel(response?.data)
+        getLevels()
         setIsLoading(false);
       })
       .catch((error) => {
@@ -103,6 +105,10 @@ function DeveloperAndLevelList({ type }: ListProps) {
     }
   }, [])
 
+  useEffect(() => {
+   getLevels()
+  }, [])
+
   return (
     <FlatListDev
       data={ type == 'dev' ? dataDev : dataLevel}
@@ -133,6 +139,7 @@ function DeveloperAndLevelList({ type }: ListProps) {
                   id={item.id}
                   // deleteMethod={deleteDeveloper}
                   // levelData={levelData}
+                  developersInLevel={dataLevel[index].desenvolvedores.length}
                   // getDevelopers={getDevelopers}
                 />
           }

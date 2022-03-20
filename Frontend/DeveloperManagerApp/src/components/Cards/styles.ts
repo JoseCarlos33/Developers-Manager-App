@@ -83,6 +83,15 @@ export const IconContent = styled.View`
   margin-left: -10px;
 `;  
 
+export const IconContentLevel = styled.View`
+  height: 90%;
+  padding: 17px 0px;
+  justify-content: space-between;
+  /* background-color: antiquewhite; */
+  margin-left: -10px;
+`;  
+
+
 export const IconButton = styled.TouchableOpacity`
   height: 45px;
   width: 45px;

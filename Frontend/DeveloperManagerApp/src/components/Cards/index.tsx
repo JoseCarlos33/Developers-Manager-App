@@ -25,7 +25,8 @@ import {
   EditText,
   SaveButton,
   AnimatedButtonView,
-  SaveButtonText
+  SaveButtonText,
+  IconContentLevel
 } from './styles'
 
 interface CardProps {
@@ -39,16 +40,10 @@ interface CardProps {
   developerLevel?: string;
   deleteMethod(arg: number): void;
   getDevelopers(): void;
-  // updateDeveloper({
-  //   id,
-  //   hobby,
-  //   idade,
-  //   nivel,
-  //   nome,
-  //   sexo
-  // }: ResquestProps): void;
+  developersInLevel: number;
   hobby?: string;
   levelData?: any;
+  getLevels(): void;
 }
 
 function Card({
@@ -64,7 +59,8 @@ function Card({
   hobby,
   levelData,
   getDevelopers,
-  // updateDeveloper
+  developersInLevel,
+  getLevels
 }: CardProps) {
 
   const [nameFormatted, setNameFormatted] = useState('');
@@ -75,6 +71,8 @@ function Card({
   const moveRefButton = useRef(new Animated.Value(0)).current;
   const opacityRefContent = useRef(new Animated.Value(0)).current;
   const moveRefContent = useRef(new Animated.Value(-100)).current;
+
+  
 
   const scaleYCard = [
     {
@@ -208,18 +206,26 @@ function Card({
     }
   }, [editCard])
 
+  // const nivel = levelData?.filter((item) => {
+  //   if(item.id == developerLevel){
+  //     return item
+  //   }
+  // })
+
+  // console.log('niveeel',nivel)
+
   return (
     <>
       {
         type == "level"
-          ? <CardContent style={{ height: hp('8%') }}>
+          ? <CardContent style={{ height: hp('13%') }}>
               <LateralColor/>
               {
                 editCard == true
                 ? 
                   <>
                     <InfoBox style={editContentAnimation}>
-                      <EditText >Editar Desenvolvedor(a)</EditText>
+                      <EditText >Editar Nível(a)</EditText>
                       <AnimatedButtonView style={scaleXButton}/>
                       <AnimatedInputs
                         id={id}
@@ -233,6 +239,7 @@ function Card({
                         setSubmitionForm={setSubmitionForm}
                         setEditCard={setEditCard}
                         getDevelopers={getDevelopers}
+
                       />
                       
                       {/* <SaveButton onPress={() => {
@@ -245,9 +252,21 @@ function Card({
                     
                   </>
                 : <>
-                    <InfoBox>
+                    <InfoBox style={{marginTop: 4}}>
                       <Name numberOfLines={1}>{nameFormatted}</Name>
+                      <InfoContentText style={{marginTop: 9}}>
+                        <Label style={{textTransform: 'none', fontSize: 14}}>Número de Desenvolvedores: </Label>
+                        <InfoText style={{marginLeft: 3, fontSize: 14}}>{developersInLevel}</InfoText>
+                      </InfoContentText>
                     </InfoBox>
+                    <IconContentLevel>
+                      <IconButton style={{height: 39}} onPress={() => setEditCard(true)}>
+                        <Icon name="edit-3" size={21} color={theme.color.orange} />
+                      </IconButton>
+                      <IconButton style={{height: 39}} onPress={handleDeleteDeveloper}>
+                        <Icon name="trash-2" size={21} color={theme.color.gray_medium} />
+                      </IconButton>
+                    </IconContentLevel>
                   </>
               }
             </CardContent>
@@ -274,6 +293,7 @@ function Card({
                         setSubmitionForm={setSubmitionForm}
                         setEditCard={setEditCard}
                         getDevelopers={getDevelopers}
+                        getLevels={getLevels}
                       />
                       
                       {/* <SaveButton onPress={() => {
@@ -298,7 +318,7 @@ function Card({
                       </InfoContentText>
                       <InfoContentText>
                         <Label>Nível: </Label>
-                        <InfoText>{developerLevel}</InfoText>
+                        <InfoText>{}</InfoText>
                       </InfoContentText>
                       <InfoContentText>
                         <Label>Idade: </Label>
@@ -306,8 +326,8 @@ function Card({
                       </InfoContentText>
                     </InfoBox>
                     <IconContent>
-                      <IconButton>
-                        <Icon name="edit-3" onPress={() => setEditCard(true)} size={21} color={theme.color.orange} />
+                      <IconButton onPress={() => setEditCard(true)}>
+                        <Icon name="edit-3" size={21} color={theme.color.orange} />
                       </IconButton>
                       <IconButton onPress={handleDeleteDeveloper}>
                         <Icon name="trash-2" size={21} color={theme.color.gray_medium} />
