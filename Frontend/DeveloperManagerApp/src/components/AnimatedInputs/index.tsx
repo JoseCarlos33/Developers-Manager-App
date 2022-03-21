@@ -160,7 +160,7 @@ function AnimatedInputs({
         "hobby": hobby
       }
 
-      const dataForCreateLevel = {
+      const dataForCreateOrUpdateLevel = {
         "nivel": name,
       }
 
@@ -176,7 +176,7 @@ function AnimatedInputs({
           });
       }
       if (type == 'CadastroNivel') {
-        await axiosInstance.post(`api/level/`, dataForCreateLevel)
+        await axiosInstance.post(`api/level/`, dataForCreateOrUpdateLevel)
           .then(response => {
             getDevelopers()
             getLevels()
@@ -199,6 +199,20 @@ function AnimatedInputs({
             console.log('error 222' + error.message);
           });
       }
+
+      if (type == "EditLevel") {
+        await axiosInstance.put(`api/level/${id}/`, dataForCreateOrUpdateLevel)
+          .then(response => {
+            setEditCard(false);
+            getLevels();
+            getDevelopers();
+            console.log(response.data)
+          })
+          .catch((error) => {
+            setEditCard(false);
+            console.log('error 222' + error.message);
+          });
+      }
       // await schema.validate(formData, {
       //   abortEarly: false,
       // });
@@ -213,11 +227,10 @@ function AnimatedInputs({
   }
 
   useEffect(() => {
-    getLevels()
     setLevels(dataLevel)
     const nivel = dataLevel.map((item) => {
-      if (item.nivel === oldLevel) {
-        console.log(item.nome)
+      if (item.nivel == oldLevel) {
+        console.log('sera?', item.nome)
         return item.id
       }
     })
@@ -258,9 +271,9 @@ function AnimatedInputs({
             >Nome</InputLabel>
           </ContentLabel>
         </InputContent>
-        {/* {
-          type == 'CadastroDev' || type == "EditDev"
-          && <> */}
+        {
+          (type == 'CadastroDev' || type == "EditDev")
+          && <>
             <InputContent>
               <Input
                 onChangeText={setGenre}
@@ -377,10 +390,10 @@ function AnimatedInputs({
                 >Hobby</InputLabel>
               </ContentLabel>
             </InputContent>
-        
-          {/* </> */}
-{/* } */}
-        
+
+          </>
+        }
+
       </Form>
       <SaveButton
         onPress={() => formRef.current?.submitForm()}
@@ -390,7 +403,7 @@ function AnimatedInputs({
       >
         <SaveButtonText>Salvar</SaveButtonText>
       </SaveButton>
-    </Container >
+    </Container>
   );
 }
 

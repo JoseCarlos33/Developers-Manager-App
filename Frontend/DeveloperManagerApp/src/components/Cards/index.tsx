@@ -50,8 +50,6 @@ interface CardProps {
 function Card({
   type,
   id,
-  level,
-  numberOfDevelopers,
   name,
   age,
   genre,
@@ -59,7 +57,6 @@ function Card({
   deleteMethod,
   hobby,
   developersInLevel,
-  getLevels
 }: CardProps) {
 
   const [nameFormatted, setNameFormatted] = useState('');
@@ -68,17 +65,26 @@ function Card({
   const [ submitionForm, setSubmitionForm ] = useState(false)
 
   const moveRefCard = useRef(new Animated.Value(180)).current;
+  const moveLevelRefCard = useRef(new Animated.Value(110)).current;
   const moveRefButton = useRef(new Animated.Value(0)).current;
   const opacityRefContent = useRef(new Animated.Value(0)).current;
   const moveRefContent = useRef(new Animated.Value(-100)).current;
+  const opacityLevelRefContent = useRef(new Animated.Value(0)).current;
+  const moveLevelRefContent = useRef(new Animated.Value(-100)).current;
 
-  const { getDevelopers, dataDevelopers, dataLevel: levelData} = useContext(RequestContext);
+  const { getDevelopers, dataDevelopers, getLevels, dataLevel: levelData} = useContext(RequestContext);
 
   
 
   const scaleYCard = [
     {
       height: moveRefCard
+    }
+  ];
+
+  const scaleYLevelCard = [
+    {
+      height: moveLevelRefCard
     }
   ];
 
@@ -97,6 +103,15 @@ function Card({
     ]
   };
 
+  const editLevelContentAnimation  = {
+    opacity: opacityLevelRefContent,
+    transform: [
+      {
+        translateX: moveLevelRefContent
+      },
+    ]
+  };
+
   function handleDeleteDeveloper() {
     const nameSplit = name?.split(' ')
     const firstName = nameSplit?.filter((item, index) => index == 0 ? item : '')
@@ -111,6 +126,41 @@ function Card({
           style: "cancel"
         },
         { text: "Deletar", onPress: () => deleteMethod(id) }
+      ]
+    );
+  }
+
+  async function deleteLevel(id: number){
+    if(developersInLevel == 0 ){
+      await axiosInstance.delete(`api/level/${id}/`)
+      .then(response => {
+        getLevels()
+      })
+      .catch((error) => {
+        console.log('error ' + error);
+      });
+    }else{
+      Alert.alert(
+        `Ação negada.`,
+        "Não é possível deletar um nível que possua desenvolvedores cadastrados, por favor, certifique-se retirar os desenvolvedores deste nível antes de prosseguir com a ação.",
+        [
+          { text: "OK", onPress: () => {}}
+        ]
+      );
+    }
+  }
+
+  async function handleDeleteLevel(id: number) {
+    Alert.alert(
+      `Deseja deletar o nível ${nameFormatted}?`,
+      "Esta será uma ação irreversível, então caso não queira ou tenha dúvidas da ação basta clicar no botão 'cancelar'.",
+      [
+        {
+          text: "Cancelar",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Deletar", onPress: () => deleteLevel(id) }
       ]
     );
   }
@@ -142,6 +192,15 @@ function Card({
         }
       ).start()
       Animated.timing(
+        moveLevelRefCard,
+        {
+          toValue: 110,
+          duration: 100,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+      Animated.timing(
         moveRefButton,
         {
           toValue: 0,
@@ -160,7 +219,25 @@ function Card({
         }
       ).start()
       Animated.timing(
+        opacityLevelRefContent,
+        {
+          toValue: 0,
+          duration: 300,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+      Animated.timing(
         moveRefContent,
+        {
+          toValue: -50,
+          duration: 300,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+      Animated.timing(
+        moveLevelRefContent,
         {
           toValue: -50,
           duration: 300,
@@ -173,6 +250,15 @@ function Card({
         moveRefCard,
         {
           toValue: 500,
+          duration: 100,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+      Animated.timing(
+        moveLevelRefCard,
+        {
+          toValue: 220,
           duration: 100,
           easing: Easing.ease,
           useNativeDriver: false
@@ -197,7 +283,25 @@ function Card({
         }
       ).start()
       Animated.timing(
+        opacityLevelRefContent,
+        {
+          toValue: 1,
+          duration: 590,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+      Animated.timing(
         moveRefContent,
+        {
+          toValue: 0,
+          duration: 400,
+          easing: Easing.ease,
+          useNativeDriver: false
+        }
+      ).start()
+      Animated.timing(
+        moveLevelRefContent,
         {
           toValue: 0,
           duration: 400,
@@ -221,14 +325,14 @@ function Card({
     <>
       {
         type == "level"
-          ? <CardContent style={{ height: hp('13%') }}>
+          ? <CardContent style={scaleYLevelCard}>
               <LateralColor/>
               {
                 editCard == true
                 ? 
                   <>
-                    <InfoBox style={editContentAnimation}>
-                      <EditText >Editar Nível(a)</EditText>
+                    <InfoBox style={editLevelContentAnimation}>
+                      <EditText >Editar Nível</EditText>
                       <AnimatedButtonView style={scaleXButton}/>
                       <AnimatedInputs
                         id={id}
@@ -240,17 +344,10 @@ function Card({
                         oldName={name!}
                         submitionForm={submitionForm}
                         setSubmitionForm={setSubmitionForm}
-                        // setEditCard={setEditCard}
+                        setEditCard={setEditCard}
+                        type="EditLevel"
                         getDevelopers={() => getDevelopers()}
-                        
                       />
-                      
-                      {/* <SaveButton onPress={() => {
-                        setSubmitionForm(true)
-                        setEditCard(false)
-                      }}>
-                        <SaveButtonText>Salvar</SaveButtonText>
-                      </SaveButton> */}
                     </InfoBox>
                     
                   </>
@@ -266,7 +363,7 @@ function Card({
                       <IconButton style={{height: 39}} onPress={() => setEditCard(true)}>
                         <Icon name="edit-3" size={21} color={theme.color.orange} />
                       </IconButton>
-                      <IconButton style={{height: 39}} onPress={handleDeleteDeveloper}>
+                      <IconButton style={{height: 39}} onPress={() => handleDeleteLevel(id)}>
                         <Icon name="trash-2" size={21} color={theme.color.gray_medium} />
                       </IconButton>
                     </IconContentLevel>
@@ -299,13 +396,6 @@ function Card({
                         getLevels={getLevels}
                         type="EditDev"
                       />
-                      
-                      {/* <SaveButton onPress={() => {
-                        setSubmitionForm(true)
-                        setEditCard(false)
-                      }}>
-                        <SaveButtonText>Salvar</SaveButtonText>
-                      </SaveButton> */}
                     </InfoBox>
                     
                   </>

@@ -19,6 +19,7 @@ function LevelList({ type, page }: ListProps) {
   
   const { getLevels, dataLevel, numberOfDevelopersList} = useContext(RequestContext);
   
+
   useEffect(() => {
     getLevels()
   }, [])
@@ -31,6 +32,9 @@ function LevelList({ type, page }: ListProps) {
         keyExtractor={() => Math.random()}
         renderItem={({ item, index }) =>
           <>
+            {
+              console.log(item.id)
+            }
             <Card
                   type="level"
                   name={item.nivel}

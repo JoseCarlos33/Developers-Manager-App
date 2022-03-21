@@ -15,6 +15,16 @@ export const Container = styled.View`
   background-color: ${theme.color.backgroundPrimary};
 `;
 
+export const IconButton = styled.TouchableOpacity`
+  height: 47px;
+  width: 47px;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 18px;
+`;
+
 export const AddButton = styled(RectButton)`
   height: 65px;
   width: 65px;

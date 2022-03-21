@@ -21,9 +21,9 @@ import {
   ContainerModal,
   Content,
   Title,
-  Footer
+  Footer,
+  IconButton
 } from './styles';
-
 
 interface ContentProps {
   width: number;
@@ -41,7 +41,7 @@ const SPA: React.FC = () => {
     width: 0,
     x: 0,
   } as ContentProps);
-  const [ visible, setVisible ] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   const [isDeveloperOption, setIsDeveloperOption] = useState(true)
   const [positionPagination, setPositionPagination] = useState(0);
@@ -52,7 +52,7 @@ const SPA: React.FC = () => {
   const scrollTranslateX = useRef(new Animated.Value(0)).current;
   const scrollX = useRef(new Animated.Value(0)).current;
 
-   const Pages = [
+  const Pages = [
     {
       key: '1',
     },
@@ -114,12 +114,12 @@ const SPA: React.FC = () => {
           data={Pages}
           extraData={page}
           keyExtractor={(item) => item.key}
-          renderItem={ ({item, index}) => 
+          renderItem={({ item, index }) =>
             <PageContent>
               {
-                index == 0 
-                ? <DeveloperList type="dev" page={page}/>
-                : <LevelList type="level" page={page}/>
+                index == 0
+                  ? <DeveloperList type="dev" page={page} />
+                  : <LevelList type="level" page={page} />
               }
             </PageContent>
           }
@@ -132,18 +132,18 @@ const SPA: React.FC = () => {
             setPositionPagination(pageWidth)
             const currentPage = pageWidth + 1.000001;
             const pageFormatted = Math.round(currentPage);
-            
-    
+
+
             Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
               useNativeDriver: true,
             });
-            if(pageFormatted == 1 || pageFormatted == 2){
+            if (pageFormatted == 1 || pageFormatted == 2) {
               getCurrentPage(contentOffset.x);
               scrollX.setValue(contentOffset.x)
             }
-            
+
           }}
-          style={{marginTop: 7}}
+          style={{ marginTop: 7 }}
         />
         <AddButton onPress={() => {
           setVisible(true)
@@ -151,13 +151,18 @@ const SPA: React.FC = () => {
           //   setVisible(false)
           // }, 2000);  
         }}>
-          <Icon name="plus" size={30} color={theme.color.white}/>
+          <Icon name="plus" size={30} color={theme.color.white} />
         </AddButton>
         <Modal visible={visible} animationType="fade" transparent>
           <ContainerModal>
-
-            <Content style={{height: page == 1 ?  hp('60%') : hp('28%')}}>
-              <Footer/>
+            <IconButton 
+              onPress={() => setVisible(false)}
+              style={{top: page == 1 ? hp('12%') : hp('29%')}}
+            >
+              <Icon name="x-circle" size={32} color={theme.color.white} />
+            </IconButton>
+            <Content style={{ height: page == 1 ? hp('60%') : hp('28%') }}>
+              <Footer />
               <AnimatedInputs
                 levelData={levelData}
                 type={page == 1 ? "CadastroDev" : "CadastroNivel"}
