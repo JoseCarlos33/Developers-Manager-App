@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./src/assets/demonstration.gif" 
+  <img src="./Frontend/DeveloperManagerApp/src/assets/demonstration.gif" 
   height="450">
 </p>
 
