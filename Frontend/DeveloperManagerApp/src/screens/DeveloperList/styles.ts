@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { FlatList } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import { theme } from '../../utils/theme';
 
 export const FlatListDev = styled(FlatList).attrs({

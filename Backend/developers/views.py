@@ -35,7 +35,6 @@ class DesenvolvedorViewSet( mixins.UpdateModelMixin, mixins.DestroyModelMixin, m
             {   
                 'nome': request.data['nome'],
                 'sexo': request.data['sexo'],
-                'data_nascimento': request.data['data_nascimento'],
                 'idade': request.data['idade'],
                 'hobby': request.data['hobby'],
                 'nivel': request.data['nivel'],
@@ -50,6 +49,9 @@ class DesenvolvedorViewSet( mixins.UpdateModelMixin, mixins.DestroyModelMixin, m
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):

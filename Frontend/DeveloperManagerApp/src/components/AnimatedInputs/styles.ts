@@ -99,7 +99,6 @@ export const SaveButton = styled(RectButton).attrs({
   zIndex: 1
 })`
   height: 50px;
-  width: 132%;
   background-color: transparent;
   position: absolute;
   bottom: -67px;
@@ -115,5 +114,13 @@ export const SaveButtonText = styled.Text`
   /* font-family: ${theme.font.regular}; */
   width: 100%;
   color: ${theme.color.white};
+  margin-bottom: 5px;
+`;
+
+export const Title = styled.Text`
+  font-size: ${RFValue(20)}px;
+  /* font-family: ${theme.font.regular}; */
+  width: 100%;
+  color: ${theme.color.orange};
   margin-bottom: 5px;
 `;

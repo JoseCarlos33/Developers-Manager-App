@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Alert, Animated, Easing} from 'react-native';
 
 import {
@@ -6,6 +6,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/dist/Feather';
+import { RequestContext } from '../../hooks';
 import { axiosInstance } from '../../services/developerService';
 import { ResquestProps } from '../../types/request';
 import { theme } from '../../utils/theme';
@@ -57,13 +58,12 @@ function Card({
   developerLevel,
   deleteMethod,
   hobby,
-  levelData,
-  getDevelopers,
   developersInLevel,
   getLevels
 }: CardProps) {
 
   const [nameFormatted, setNameFormatted] = useState('');
+  const [ levelName, setLevelName ] = useState('')
   const [editCard, setEditCard] = useState(false);
   const [ submitionForm, setSubmitionForm ] = useState(false)
 
@@ -71,6 +71,8 @@ function Card({
   const moveRefButton = useRef(new Animated.Value(0)).current;
   const opacityRefContent = useRef(new Animated.Value(0)).current;
   const moveRefContent = useRef(new Animated.Value(-100)).current;
+
+  const { getDevelopers, dataDevelopers, dataLevel: levelData} = useContext(RequestContext);
 
   
 
@@ -205,14 +207,15 @@ function Card({
       ).start()
     }
   }, [editCard])
-
-  // const nivel = levelData?.filter((item) => {
-  //   if(item.id == developerLevel){
-  //     return item
-  //   }
-  // })
-
-  // console.log('niveeel',nivel)
+  
+  useEffect(() => {
+    levelData?.map((item) => {
+      if(item.id == developerLevel){
+        setLevelName(item.nivel)
+      }
+    })
+  
+  }, [])
 
   return (
     <>
@@ -237,9 +240,9 @@ function Card({
                         oldName={name!}
                         submitionForm={submitionForm}
                         setSubmitionForm={setSubmitionForm}
-                        setEditCard={setEditCard}
-                        getDevelopers={getDevelopers}
-
+                        // setEditCard={setEditCard}
+                        getDevelopers={() => getDevelopers()}
+                        
                       />
                       
                       {/* <SaveButton onPress={() => {
@@ -287,13 +290,14 @@ function Card({
                         levelData={levelData}
                         oldGenre={genre!}
                         oldHobby={hobby!}
-                        oldLevel={developerLevel!}
+                        oldLevel={levelName!}
                         oldName={name!}
                         submitionForm={submitionForm}
                         setSubmitionForm={setSubmitionForm}
                         setEditCard={setEditCard}
                         getDevelopers={getDevelopers}
                         getLevels={getLevels}
+                        type="EditDev"
                       />
                       
                       {/* <SaveButton onPress={() => {
@@ -318,7 +322,7 @@ function Card({
                       </InfoContentText>
                       <InfoContentText>
                         <Label>Nível: </Label>
-                        <InfoText>{}</InfoText>
+                        <InfoText>{levelName}</InfoText>
                       </InfoContentText>
                       <InfoContentText>
                         <Label>Idade: </Label>
